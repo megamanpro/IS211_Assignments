@@ -16,10 +16,8 @@ def parse_args():
     return p.parse_args()
 
 def open_source(source):
-    """Return a text‐mode file‐like for a local file or an HTTP URL."""
     if source.startswith(('http://', 'https://')):
         resp = urllib.request.urlopen(source)
-        # wrap the bytes stream in a TextIO so csv.reader can consume it
         return io.TextIOWrapper(resp, encoding='utf-8', errors='replace')
     else:
         return open(source, newline='', encoding='utf-8')
@@ -39,7 +37,6 @@ def main():
     image_hits = 0
     browser_counts = Counter()
 
-    # use our helper instead of open() directly
     with open_source(args.filepath) as f:
         reader = csv.reader(f)
         for row in reader:
