@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import argparse
 import random
 import time
@@ -31,8 +30,7 @@ class HumanPlayer(Player):
                     print("Rolled a 1. Turn over, no points added.")
                     return
                 turn_total += roll
-                # If this roll made them reach WIN_SCORE, they hold automatically next check in game loop
-            else:  # hold
+            else:
                 self.score += turn_total
                 print(f"{self.name} holds. New score: {self.score}")
                 return
@@ -43,7 +41,6 @@ class ComputerPlayer(Player):
         print(f"\n{self.name}'s turn. Score: {self.score}")
         while True:
             threshold = min(25, WIN_SCORE - self.score)
-            # Decide to hold if accumulated this turn >= threshold
             if turn_total >= threshold:
                 self.score += turn_total
                 print(f"{self.name} holds with turn total {turn_total}. New score: {self.score}")
@@ -73,7 +70,6 @@ class Game:
         return random.randint(1, 6)
 
     def play(self):
-        # Returns winner (Player) or None if time-limited proxy ended the game
         while all(p.score < WIN_SCORE for p in self.players):
             for player in self.players:
                 player.take_turn(self)
@@ -93,14 +89,12 @@ class TimedGameProxy:
 
     def play(self):
         self.start_time = time.time()
-        # Same loop structure, but check time at key points
         while all(p.score < WIN_SCORE for p in self.game.players):
             if time.time() - self.start_time > self.time_limit_seconds:
                 winner = max(self.game.players, key=lambda p: p.score)
                 print(f"\nTime's up! {winner.name} wins with {winner.score} points.")
                 return winner
             for player in self.game.players:
-                # Before each player's turn, check time again
                 if time.time() - self.start_time > self.time_limit_seconds:
                     winner = max(self.game.players, key=lambda p: p.score)
                     print(f"\nTime's up! {winner.name} wins with {winner.score} points.")
@@ -135,8 +129,6 @@ def main():
         game = TimedGameProxy(base_game)
     else:
         game = base_game
-
-    # Play the game
     try:
         game.play()
     except KeyboardInterrupt:
