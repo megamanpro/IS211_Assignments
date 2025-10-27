@@ -112,7 +112,6 @@ def parse_args_with_defaults():
     parser.add_argument("--timed", action="store_true", help="Enable timed mode (60s)")
     args = parser.parse_args()
 
-    # Provide defaults when running without args (convenience for PyCharm)
     if args.player1 is None or args.player2 is None:
         print("No --player1/--player2 provided, defaulting to: --player1 human --player2 computer")
         args.player1 = args.player1 or "human"
